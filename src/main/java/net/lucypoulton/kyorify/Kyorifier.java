@@ -13,7 +13,8 @@ public final class Kyorifier {
     private static final Map<Character, String> COLOURS = new HashMap<>(15);
     private static final Map<Character, String> FORMATTERS = new HashMap<>(6);
     private static final Pattern pattern = Pattern.compile("" +
-            "&(?<code>[\\da-fk-or])|[&{\\[<]?[#x](?<hex>(&?[a-f\\d]){6})[}\\]>]?",
+            "&(?<code>[\\da-fk-or])|" +
+            "(?:&|\\{|<)?#(?<hex>[a-f\\d]{6})(?:\\}|>)?",
             Pattern.CASE_INSENSITIVE);
 
     static {
@@ -58,7 +59,7 @@ public final class Kyorifier {
             final var code = matcher.group("code");
             final var colour = hex == null ?
                     COLOURS.get(Character.toLowerCase(code.charAt(0)))
-                    : "#" + hex.replace("&", "");
+                    : "#" + hex;
 
             if (colour == null) {
                 final var formatter = FORMATTERS.get(Character.toLowerCase(code.charAt(0)));
